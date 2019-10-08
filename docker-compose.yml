@@ -5,7 +5,7 @@ services:
     image: ${MONGODB_IMAGE}
     command: --port=27017
     ports:
-      - 27027:27017
+      - 27027:2701
     volumes:
       - ./docker/test/entrypoint-mongod.sh:/entrypoint.sh:ro
       - ./docker/test/entrypoint-mongod.sh:/usr/local/bin/docker-entrypoint.sh:ro
