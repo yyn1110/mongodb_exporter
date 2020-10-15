@@ -1,20 +1,11 @@
-FROM golang:1.13
 
-LABEL maintainer="Meik Minks <mminks@inoxio.de>"
 
+FROM golang:1.15.1-alpine3.12 as go-builder
 WORKDIR /go/src/github.com/percona/mongodb_exporter
-
 COPY . .
-
-RUN make build
-
-FROM quay.io/prometheus/busybox:latest
-
-LABEL maintainer="Alexey Palazhchenko <alexey.palazhchenko@percona.com>"
-
-COPY --from=0 /go/src/github.com/percona/mongodb_exporter/bin/mongodb_exporter /bin/mongodb_exporter
-
-EXPOSE 9216
-
+RUN go build
+FROM alpine:3.12
+COPY --from=go-builder /go/src/github.com/percona/mongodb_exporter/mongodb_exporter /bin/mongodb_exporter
+EXPOSE     9216
 ENTRYPOINT [ "/bin/mongodb_exporter" ]
 
